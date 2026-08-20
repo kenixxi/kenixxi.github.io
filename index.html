@@ -1,11 +1,263 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>KeniX</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeniX — desktop apps for League of Legends</title>
+<meta name="description" content="Small, native Windows apps for League of Legends. Built and maintained by KeniX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Public+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0B1015;
+  --steel:#131C24;
+  --panel:#18242E;
+  --edge:#243642;
+  --brass:#C8A45C;
+  --brass-dim:#8A7239;
+  --mist:#8FA3AE;
+  --clear:#EDF2F4;
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Public Sans',system-ui,sans-serif;
+  --data:'JetBrains Mono',ui-monospace,monospace;
+  --gut:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--clear);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--gut)}
+
+.tag{font-family:var(--data);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.tag--mist{color:var(--mist)}
+h1,h2,h3{font-family:var(--display);font-weight:900;line-height:1;letter-spacing:-.03em}
+h1{font-size:clamp(48px,9vw,116px)}
+h2{font-size:clamp(28px,4.2vw,46px)}
+h3{font-size:21px;letter-spacing:-.01em}
+.lede{font-size:clamp(16px,1.7vw,19px);color:var(--mist);max-width:50ch}
+
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--data);font-size:12px;letter-spacing:.13em;text-transform:uppercase;padding:11px 18px;border:1px solid var(--brass-dim);color:var(--brass);background:transparent;transition:.18s}
+.btn:hover{background:var(--brass);color:var(--void);border-color:var(--brass)}
+.btn--ghost{border-color:var(--edge);color:var(--mist)}
+.btn--ghost:hover{background:var(--edge);color:var(--clear);border-color:var(--edge)}
+
+nav{position:sticky;top:0;z-index:60;background:rgba(11,16,21,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge)}
+.nav-in{display:flex;align-items:center;height:66px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:.02em}
+.mark{width:24px;height:24px;flex:none}
+.nav-in .btn{margin-left:auto}
+
+/* hero */
+.hero{padding:clamp(70px,12vw,150px) 0 clamp(50px,7vw,84px);position:relative}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(760px 420px at 74% 0%,rgba(200,164,92,.1),transparent 68%),radial-gradient(560px 340px at 4% 10%,rgba(36,54,66,.55),transparent 72%)}
+.hero h1{margin:18px 0 22px;letter-spacing:-.045em}
+.hero h1 em{font-style:normal;color:var(--brass)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;font-family:var(--data);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+.hero-meta b{color:var(--clear);font-weight:400}
+
+/* the shelf — signature */
+.shelf{padding:clamp(50px,7vw,86px) 0;border-top:1px solid var(--edge)}
+.shelf-head{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:26px}
+.slots{display:grid;gap:1px;background:var(--edge);border:1px solid var(--edge)}
+
+.slot{background:var(--void);display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:clamp(16px,3vw,34px);align-items:center;padding:clamp(22px,3vw,32px) clamp(20px,2.6vw,30px);transition:background .2s}
+.slot--live:hover{background:var(--steel)}
+.slot-n{font-family:var(--display);font-weight:900;font-size:clamp(30px,4vw,46px);color:var(--edge);line-height:1}
+.slot--live .slot-n{color:var(--brass-dim)}
+.slot-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:9px}
+.slot h3{font-size:clamp(20px,2.6vw,27px)}
+.slot p{color:var(--mist);font-size:14.5px;max-width:54ch}
+.chip{font-family:var(--data);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:4px 8px;border:1px solid var(--edge);color:var(--mist)}
+.chip--live{border-color:var(--brass-dim);color:var(--brass)}
+.slot-side{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.slot-stat{font-family:var(--data);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+
+/* empty slots are honest, not hype */
+.slot--empty{background:linear-gradient(180deg,var(--void),#0D141A)}
+.slot--empty h3{color:var(--mist)}
+.slot--empty .slot-body{opacity:.72}
+.slot--empty::after{content:""}
+.hatch{
+  background-image:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(36,54,66,.5) 6px,rgba(36,54,66,.5) 7px);
+}
+@media(max-width:720px){
+  .slot{grid-template-columns:44px minmax(0,1fr);row-gap:14px}
+  .slot-side{grid-column:2;flex-direction:row;align-items:center;justify-content:flex-start}
+}
+
+/* how */
+.how{border-top:1px solid var(--edge);background:var(--steel);padding:clamp(60px,8vw,104px) 0}
+.how-head{max-width:56ch;margin-bottom:clamp(28px,4vw,46px)}
+.how-head h2{margin:14px 0 16px}
+.how-head h2 em{font-style:normal;color:var(--brass)}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:1px;background:var(--edge);border:1px solid var(--edge)}
+.rule-card{background:var(--steel);padding:26px 22px}
+.rule-card h3{font-size:16px;margin:13px 0 9px}
+.rule-card p{font-size:14px;color:var(--mist)}
+
+/* contact */
+.contact{padding:clamp(60px,8vw,104px) 0;border-top:1px solid var(--edge);text-align:center}
+.contact h2{margin:16px auto 20px;max-width:18ch}
+.contact h2 em{font-style:normal;color:var(--brass)}
+.contact-links{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:8px}
+
+footer{border-top:1px solid var(--edge);padding:38px 0 52px;background:var(--steel)}
+.foot-in{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.foot-links{display:flex;gap:20px;font-size:13.5px;color:var(--mist)}
+.foot-links a:hover{color:var(--brass)}
+.disclaimer{font-size:11.5px;color:#5C6D78;margin-top:24px;max-width:70ch;line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-  <h1>KeniX</h1>
-  <p>Wkrótce.</p>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 4v16M4 12l9-8M4 12l9 8" stroke="#C8A45C" stroke-width="1.8" stroke-linecap="square"/>
+        <circle cx="19" cy="12" r="2.2" fill="#C8A45C"/>
+      </svg>
+      KENIX
+    </a>
+    <a class="btn btn--ghost" href="#apps">Apps</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <span class="tag">Independent developer · Windows desktop</span>
+    <h1>Small tools for <em>ranked players.</em></h1>
+    <p class="lede">Native Windows apps for League of Legends. Each one solves a single problem properly instead of being another all-in-one overlay you stop opening after a week.</p>
+    <div class="hero-meta">
+      <span>Apps shipped <b>1</b></span>
+      <span>Riot password required <b>Never</b></span>
+      <span>Price <b>Free</b></span>
+    </div>
+  </div>
+</header>
+
+<section class="shelf" id="apps">
+  <div class="wrap">
+    <div class="shelf-head">
+      <span class="tag tag--mist">The shelf</span>
+      <span class="tag tag--mist">1 live · 2 in progress</span>
+    </div>
+
+    <div class="slots">
+
+      <a class="slot slot--live" href="/Lock/">
+        <span class="slot-n">01</span>
+        <div class="slot-body">
+          <div class="slot-head">
+            <h3>Lock</h3>
+            <span class="chip chip--live">Live · v1.3.0</span>
+          </div>
+          <p>Champion-pool discipline. Watches champ select through the League Client's local lockfile and warns you the moment you hover something outside the two to five champions you actually win on.</p>
+        </div>
+        <div class="slot-side">
+          <span class="slot-stat">Open →</span>
+          <span class="slot-stat">Windows 10/11</span>
+        </div>
+      </a>
+
+      <div class="slot slot--empty hatch">
+        <span class="slot-n">02</span>
+        <div class="slot-body">
+          <div class="slot-head">
+            <h3>Unclaimed</h3>
+            <span class="chip">Empty</span>
+          </div>
+          <p>Nothing here yet. If there's a problem in your ranked routine that a small desktop app would actually fix, that's the kind of thing that ends up in this slot.</p>
+        </div>
+        <div class="slot-side">
+          <span class="slot-stat">Suggest an idea</span>
+        </div>
+      </div>
+
+      <div class="slot slot--empty hatch">
+        <span class="slot-n">03</span>
+        <div class="slot-body">
+          <div class="slot-head">
+            <h3>Unclaimed</h3>
+            <span class="chip">Empty</span>
+          </div>
+          <p>Same deal. The shelf grows one app at a time, and only when the app is worth downloading.</p>
+        </div>
+        <div class="slot-side">
+          <span class="slot-stat">Suggest an idea</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="how-head">
+      <span class="tag">How these get built</span>
+      <h2>Rules the shelf <em>runs on.</em></h2>
+    </div>
+    <div class="rules">
+      <div class="rule-card">
+        <span class="tag tag--mist">Local first</span>
+        <h3>Your account stays yours</h3>
+        <p>These apps read what the League Client already writes on your own machine. No Riot password is ever asked for, and nothing about your login leaves your PC.</p>
+      </div>
+      <div class="rule-card">
+        <span class="tag tag--mist">Native</span>
+        <h3>Real desktop apps</h3>
+        <p>Built in Python with Qt and packaged for Windows. No embedded browser sitting in the background eating a gigabyte of RAM while you play.</p>
+      </div>
+      <div class="rule-card">
+        <span class="tag tag--mist">One job</span>
+        <h3>Narrow on purpose</h3>
+        <p>Each app does one thing. When an idea doesn't fit the app it's in, it becomes the next slot instead of another tab in the last one.</p>
+      </div>
+      <div class="rule-card">
+        <span class="tag tag--mist">Free</span>
+        <h3>No paywall, no ads</h3>
+        <p>Downloads are free and always will be. If an app ever needs a server bill paid, that gets said out loud rather than quietly bolted on.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="wrap">
+    <span class="tag">Creator</span>
+    <h2>Built and maintained <em>by KeniX.</em></h2>
+    <p class="lede" style="margin:0 auto">Bug reports, feature ideas and "why does it do this" messages are all welcome — they're how the shelf gets its next entry.</p>
+    <div class="contact-links">
+      <a class="btn" href="mailto:kenixio777@gmail.com">kenixio777@gmail.com</a>
+      <a class="btn btn--ghost" href="https://github.com/kenixxi">GitHub @kenixxi</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-in">
+      <a class="brand" href="#top">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 4v16M4 12l9-8M4 12l9 8" stroke="#C8A45C" stroke-width="1.8" stroke-linecap="square"/>
+          <circle cx="19" cy="12" r="2.2" fill="#C8A45C"/>
+        </svg>
+        KENIX
+      </a>
+      <div class="foot-links">
+        <a href="#apps">Apps</a>
+        <a href="/Lock/">Lock</a>
+        <a href="https://github.com/kenixxi">GitHub</a>
+      </div>
+    </div>
+    <p class="disclaimer">These are independent projects and are not endorsed by Riot Games. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+  </div>
+</footer>
+
 </body>
 </html>
