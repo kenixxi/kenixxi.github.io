@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- KENIX favicon. Same tile and brass as the Lock mark so the two read
+       as one family in a tab bar. Strokes are heavy on purpose: thin ones
+       vanish at 16px. -->
+  <rect width="32" height="32" rx="7" fill="#0B1015"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" fill="none" stroke="#243642"/>
+  <!-- K: stem plus two arms -->
+  <path d="M8 6.5v19M8 16l8.4-9.5M8 16l8.4 9.5"
+        fill="none" stroke="#C8A45C" stroke-width="3.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the locked point -->
+  <circle cx="22.2" cy="16" r="2.8" fill="#C8A45C"/>
+</svg>
